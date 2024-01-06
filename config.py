@@ -51,7 +51,6 @@ class Config(BaseModel):
                 },
             )
 
-
         return options
 
 

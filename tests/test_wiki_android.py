@@ -32,7 +32,7 @@ def test_onboarding_screen_and_search():
         browser.element((AppiumBy.ID, 'org.wikipedia.alpha:id/primaryTextView')).should(
             have.text('Send anonymous data'))
 
-    with allure.step('Accept User Agreemen'):
+    with allure.step('Accept User Agreement'):
         browser.element((AppiumBy.ID, 'org.wikipedia.alpha:id/acceptButton')).click()
 
     with allure.step('Type search'):
