@@ -1,9 +1,9 @@
 import os
 
 from appium.options.android import UiAutomator2Options
+from dotenv import load_dotenv
+import utils
 from pydantic import BaseModel
-
-from utils import file
 
 
 class Config(BaseModel):
@@ -11,11 +11,12 @@ class Config(BaseModel):
     remote_url: str = os.getenv('REMOTE_URL')
     device_name: str = os.getenv('DEVICE_NAME')
     udid: str = os.getenv('UDID')
-    appWaitActivity: str = os.getenv('appWaitActivity', 'org.wikipedia.*')
-    app_local: str = file.abs_path_from_project('app-alpha-universal-release.apk')
+    appWaitActivity: str = os.getenv('APP_WAIT_ACTIVITY')
+    app_local: str = utils.file.abs_path_from_project(os.getenv('APP'))
     app_bstack: str = os.getenv('APP')
     platformName: str = os.getenv('PLATFORM_NAME')
     platformVersion: str = os.getenv('PLATFORM_VERSION')
+    load_dotenv(dotenv_path=utils.file.abs_path_from_project('.env.credentials'))
     userName: str = os.getenv('USER_NAME')
     accessKey: str = os.getenv('ACCESS_KEY')
 
@@ -43,15 +44,20 @@ class Config(BaseModel):
             options.set_capability('app', self.app_bstack)
             options.set_capability(
                 'bstack:options', {
-                    'projectName': 'First Python project',
-                    'buildName': 'browserstack-build-1',
-                    'sessionName': 'BStack first_test',
+                    'projectName': 'Wikipedia tests project',
+                    'buildName': 'Wikipedia-app-build',
+                    'sessionName': 'Wikipedia tests',
                     'userName': self.userName,
                     'accessKey': self.accessKey,
                 },
             )
 
+        print(self.device_name)
+
         return options
 
 
 config = Config(context="local_emulator")
+
+
+

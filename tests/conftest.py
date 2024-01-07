@@ -1,25 +1,30 @@
+import os
 import allure
 import allure_commons
 import pytest
-from appium import webdriver
-from dotenv import load_dotenv
+
 from selene import browser, support
-
+from appium import webdriver
 import utils
+from dotenv import load_dotenv
 
 
-def pytest_addoption(parser, pluginmanager):
+def pytest_addoption(parser):
     parser.addoption(
         "--context",
-        required=False,
         default="bstack",
-        choices=['local_emulator', 'bstack'],
+        help="Specify the test context"
     )
 
 
 def pytest_configure(config):
     context = config.getoption("--context")
-    load_dotenv(dotenv_path=f'.env.{context}')
+    env_file_path = f".env.{context}"
+
+    if os.path.exists(env_file_path):
+        load_dotenv(dotenv_path=env_file_path)
+    else:
+        print(f"Warning: Configuration file '{env_file_path}' not found.")
 
 
 @pytest.fixture
@@ -30,7 +35,6 @@ def context(request):
 @pytest.fixture(scope='function', autouse=True)
 def android_mobile_management(context):
     from config import config
-
     options = config.to_driver_options(context=context)
 
     with allure.step('setup app session'):
