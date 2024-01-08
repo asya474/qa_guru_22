@@ -52,12 +52,7 @@ class Config(BaseModel):
                 },
             )
 
-        print(self.device_name)
-
         return options
 
 
 config = Config(context="local_emulator")
-
-
-
